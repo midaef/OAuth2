@@ -1,9 +1,13 @@
 package models
 
 import (
-	"encoding/json"	"net/http"
+	"crypto/sha512"
+	"encoding/base64"
+	"encoding/json"
+	"io"
+	"net/http"
+	"time"
 )
-
 
 type User struct {
 	GUID string `json:"guid"`
@@ -22,16 +26,18 @@ type Refresh struct {
 
 func NewAuth(user *User, w http.ResponseWriter) []byte {
 	if len(user.GUID) == 32 {
+		h := sha512.New()
+		io.WriteString(h, user.GUID)
 		jsonAuth, _ := json.Marshal(Auth{
-			AccessToken: ,
-			Refresh:,
-			LifeTime:,
-			Status:,
+			AccessToken: base64.URLEncoding.EncodeToString(h.Sum(nil)),
+			Refresh:     base64.StdEncoding.EncodeToString([]byte(user.GUID)),
+			LifeTime:    "30",
+			Status:      "OK",
 		})
-		w.WriteHeader(http.OK)
+		w.WriteHeader(http.StatusOK)
 		return jsonAuth
 	}
-	jsonMessage, _ = json.Marshal(models.Message{
+	jsonMessage, _ := json.Marshal(Message{
 		DateTime: time.Now().Format("01-02-2006 15:04:05"),
 		Status:   "StatusUnauthorized",
 	})
