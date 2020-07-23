@@ -2,6 +2,7 @@ package server
 
 import (
 	"log"
+	"net/http"
 	"packages/config"
 
 	"github.com/gorilla/mux"
@@ -21,11 +22,17 @@ func NewServer(serverConfig *config.ServerConfig, dbConfig *config.DataBaseConfi
 		ServerConfig:   serverConfig,
 		DataBaseConfig: dbConfig,
 		Logger:         NewLogger(serverConfig.LogLevel),
+		Router:         mux.NewRouter(),
 	}
 }
 
 func (s *Server) StartServer() error {
-	return nil
+	s.NewAuthController()
+	s.Logger.Info("Server started",
+		zap.String("Name", "OAuth2"),
+		zap.String("Port", s.ServerConfig.Port),
+	)
+	return http.ListenAndServe(s.ServerConfig.Port, s.Router)
 }
 
 func NewLogger(logLevel string) *zap.Logger {
