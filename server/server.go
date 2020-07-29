@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"packages/config"
+	"packages/database"
 
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
@@ -15,6 +16,7 @@ type Server struct {
 	DataBaseConfig *config.DataBaseConfig
 	Logger         *zap.Logger
 	Router         *mux.Router
+	ConnectionDB   *database.Connection
 }
 
 func NewServer(serverConfig *config.ServerConfig, dbConfig *config.DataBaseConfig) *Server {
@@ -23,6 +25,7 @@ func NewServer(serverConfig *config.ServerConfig, dbConfig *config.DataBaseConfi
 		DataBaseConfig: dbConfig,
 		Logger:         NewLogger(serverConfig.LogLevel),
 		Router:         mux.NewRouter(),
+		ConnectionDB:   database.NewConnectionDB(dbConfig.Name, dbConfig.User, dbConfig.Password),
 	}
 }
 

@@ -15,6 +15,7 @@ type ServerConfig struct {
 
 type DataBaseConfig struct {
 	Name     string `toml:"db_name"`
+	User     string `toml:"db_user"`
 	Host     string `toml:"db_host"`
 	Password string `toml:"db_password"`
 }
@@ -45,6 +46,7 @@ func ReadConfig(configName string) (*ServerConfig, *DataBaseConfig) {
 			LogLevel: viper.GetString("log_level"),
 		}, &DataBaseConfig{
 			Name:     viper.GetString("db_name"),
+			User:     viper.GetString("db_user"),
 			Host:     viper.GetString("db_host"),
 			Password: viper.GetString("db_password"),
 		}

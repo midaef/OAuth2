@@ -1,6 +1,7 @@
 host = "localhost"
 port = ":65000"
 log_level = "debug"
-db_name = "MyTestCluster"
+db_name = "DataBaseTest"
+db_user = "root"
 db_host = "2.95.155.99"
 db_password = "8093"
